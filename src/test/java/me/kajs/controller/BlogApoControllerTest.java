@@ -46,11 +46,11 @@ class BlogApoControllerTest {
         return blogReepository.save(new Article(title, content));
     }
 
-    @DisplayName("1. POST /api/articles : 成功添加博客文章")
+    @DisplayName("1. POST /api/articles : 블로그 글 등록에 성공한다")
     @Test
     void addArticle() throws Exception {
-        String title = "11/4周三老登的课";
-        String content = "进行了将数据储存到DB的练习";
+        String title = "첫 번째 글의 제목";
+        String content = "첫 번째 글의 내용입니다.";
         AddArticleRequest request = new AddArticleRequest(title, content);
         String requestBody = objectMapper.writeValueAsString(request);
         String url = "/api/articles";
@@ -69,39 +69,39 @@ class BlogApoControllerTest {
         assertThat(articles.get(0).getContent()).isEqualTo(content);
     }
 
-    @DisplayName("2. GET /api/articles : 成功查询全部文章")
+    @DisplayName("2. GET /api/articles : 전체 글 목록 조회에 성공한다")
     @Test
     void getAllArticles() throws Exception {
-        saveArticle("标题1", "内容1");
-        saveArticle("标题2", "内容2");
+        saveArticle("제목1", "내용1");
+        saveArticle("제목2", "내용2");
 
         ResultActions result = mockMvc.perform(get("/api/articles"));
 
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].title").value("标题1"))
-                .andExpect(jsonPath("$[0].content").value("内容1"))
-                .andExpect(jsonPath("$[1].title").value("标题2"))
-                .andExpect(jsonPath("$[1].content").value("内容2"));
+                .andExpect(jsonPath("$[0].title").value("제목1"))
+                .andExpect(jsonPath("$[0].content").value("내용1"))
+                .andExpect(jsonPath("$[1].title").value("제목2"))
+                .andExpect(jsonPath("$[1].content").value("내용2"));
     }
 
-    @DisplayName("3. GET /api/articles/{id} : 成功查询单篇文章")
+    @DisplayName("3. GET /api/articles/{id} : 글 단건 조회에 성공한다")
     @Test
     void getArticle() throws Exception {
-        Article article = saveArticle("查询用的标题", "查询用的内容");
+        Article article = saveArticle("조회용 제목", "조회용 내용");
         Long id = article.getId();
 
         ResultActions result = mockMvc.perform(get("/api/articles/{id}", id));
 
         result.andExpect(status().isOk())
-                .andExpect(jsonPath("$.title").value("查询用的标题"))
-                .andExpect(jsonPath("$.content").value("查询用的内容"));
+                .andExpect(jsonPath("$.title").value("조회용 제목"))
+                .andExpect(jsonPath("$.content").value("조회용 내용"));
     }
 
-    @DisplayName("4. DELETE /api/articles/{id} : 成功删除单篇文章")
+    @DisplayName("4. DELETE /api/articles/{id} : 글 삭제에 성공한다")
     @Test
     void deleteArticle() throws Exception {
-        Article article = saveArticle("要被删除的标题", "要被删除的内容");
+        Article article = saveArticle("삭제할 제목", "삭제할 내용");
         Long id = article.getId();
         assertThat(blogReepository.existsById(id)).isTrue();
 
@@ -112,13 +112,13 @@ class BlogApoControllerTest {
         assertThat(blogReepository.findAll()).isEmpty();
     }
 
-    @DisplayName("5. PUT /api/articles/{id} : 成功修改单篇文章")
+    @DisplayName("5. PUT /api/articles/{id} : 글 수정에 성공한다")
     @Test
     void updateArticle() throws Exception {
-        Article article = saveArticle("修改前的标题", "修改前的内容");
+        Article article = saveArticle("수정 전 제목", "수정 전 내용");
         Long id = article.getId();
-        String newTitle = "修改后的标题";
-        String newContent = "修改后的内容";
+        String newTitle = "수정 후 제목";
+        String newContent = "수정 후 내용";
         UpdateArticleRequest request = new UpdateArticleRequest(newTitle, newContent);
         String requestBody = objectMapper.writeValueAsString(request);
 
