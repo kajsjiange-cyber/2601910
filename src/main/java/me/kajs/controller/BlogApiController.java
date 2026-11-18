@@ -14,7 +14,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-public class BlogApoController {
+public class BlogApiController {
     private final BlogService blogService;
 
     @PostMapping("/api/articles")
