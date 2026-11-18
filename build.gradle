@@ -32,7 +32,6 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    // Mockito Java Agent
     mockitoAgent('org.mockito:mockito-core') {
         transitive = false
     }

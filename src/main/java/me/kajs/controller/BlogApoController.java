@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -19,38 +18,22 @@ public class BlogApoController {
     private final BlogService blogService;
 
     @PostMapping("/api/articles")
-//    public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest request) {
-//        Article savedArticle = blogService.save(request);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(savedArticle);
-//
-//    }
     public ResponseEntity<ArticleResponse> addArticle(@RequestBody AddArticleRequest request) {
         Article savedArticle = blogService.save(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ArticleResponse(savedArticle));
-
     }
+
     @GetMapping("/api/articles")
     public ResponseEntity<List<ArticleResponse>> getAllArticles() {
-
-//        List<Article> articleList = blogService.getAll();
-//        List<ArticleResponse> articleResponseList = new ArrayList<>();
-//        for(Article article : articleList) {
-//            ArticleResponse ar = new ArticleResponse(article);
-//            articleResponseList.add(ar);
-//        }
         List<ArticleResponse> articleResponseList = blogService.getAll()
                 .stream()
-                //.map(a->new ArticleResponse(a))
                 .map(ArticleResponse::new)
                 .toList();
         return ResponseEntity.ok().body(articleResponseList);
     }
 
     @GetMapping("/api/articles/{id}")
-    public ResponseEntity<ArticleResponse> getArticle(
-            @PathVariable Long id) {
-
-
+    public ResponseEntity<ArticleResponse> getArticle(@PathVariable Long id) {
         return ResponseEntity.ok()
                 .body(new ArticleResponse(blogService.findById(id)));
     }
@@ -61,20 +44,11 @@ public class BlogApoController {
         return ResponseEntity.ok().build();
     }
 
-
     @PutMapping("/api/articles/{id}")
     public ResponseEntity<ArticleResponse> updateArticle(@PathVariable long id,
-                                                 @RequestBody UpdateArticleRequest req) {
+                                                         @RequestBody UpdateArticleRequest req) {
         Article updatedArticle = blogService.updateArticle(id, req);
         return ResponseEntity.ok()
                 .body(new ArticleResponse(updatedArticle));
     }
-
-
-
-
-
-//    public BlogApoController(blogService service){
-//        this.blogService = service;
-//      }
 }

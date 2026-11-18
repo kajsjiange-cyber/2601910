@@ -6,7 +6,6 @@ spring:
       enabled: true
       path: /h2-console
   jpa:
-    # 전송 쿼리 확인
     show-sql: true
     properties:
       hibernate:
